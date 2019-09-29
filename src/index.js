@@ -1,15 +1,21 @@
 const fs = require('fs')
 
-const getValues = (path = '.env') =>
-    fs
-        .readFileSync(path, { encoding: 'utf-8' })
-        .trim()
-        .split('\n')
-        .map(line => line.split(/=(.*)/))
-        .reduce((acc, [key, value]) => {
-            acc[key] = value
-            return acc
-        }, {})
+const getValues = (path = '.env') => {
+    try {
+        return fs
+            .readFileSync(path, { encoding: 'utf-8' })
+            .trim()
+            .split('\n')
+            .map(line => line.split(/=(.*)/))
+            .reduce((acc, [key, value]) => {
+                acc[key] = value
+                return acc
+            }, {})
+    } catch (e) {
+        return {}
+    }
+}
+
 
 class ServerlessOfflineSSMProvider {
     constructor(serverless) {
