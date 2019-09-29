@@ -1,0 +1,19 @@
+{
+  "name": "serverless-offline-ssm-override",
+  "version": "1.0.0",
+  "description": "Override AWS SSM values for local development",
+  "main": "src",
+  "files": [
+    "src/index.js"
+  ],
+  "author": "sgb-io",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.11"
+  },
+  "keywords": [
+    "ssm",
+    "serverless",
+    "lambda"
+  ]
+}
