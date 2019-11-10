@@ -18,7 +18,19 @@ const getValues = (path = '.env') => {
 
 
 class ServerlessOfflineSSMProvider {
-    constructor(serverless) {
+    constructor(serverless, options) {
+        // Do nothing unless offline
+        const hasInput = serverless
+            && serverless.processedInput
+            && serverless.processedInput.commands
+            && serverless.processedInput.commands.length > 0
+        if (hasInput) {
+            const isOffline = serverless.processedInput.commands.find(c => c === 'offline')
+            if (!isOffline) {
+                return
+            }
+        }
+
         this.serverless = serverless
         this.config = this.serverless.service.custom['serverless-offline-ssm-provider']
         this.values = this.config ? getValues(this.config.file) : getValues()
@@ -27,6 +39,7 @@ class ServerlessOfflineSSMProvider {
         const request = aws.request.bind(aws)
 
         aws.request = (service, method, params, options) => {
+
             if (service !== 'SSM' || method !== 'getParameter')
                 return request(service, method, params, options)
 
