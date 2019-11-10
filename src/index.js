@@ -18,17 +18,18 @@ const getValues = (path = '.env') => {
 
 
 class ServerlessOfflineSSMProvider {
-    constructor(serverless, options) {
-        // Do nothing unless offline
+    constructor(serverless) {
+        // This plugin should only do something when offline
+        let isOffline = false
         const hasInput = serverless
             && serverless.processedInput
             && serverless.processedInput.commands
             && serverless.processedInput.commands.length > 0
         if (hasInput) {
-            const isOffline = serverless.processedInput.commands.find(c => c === 'offline')
-            if (!isOffline) {
-                return
-            }
+            isOffline = serverless.processedInput.commands.some(c => c === 'offline')
+        }
+        if (!hasInput || !isOffline) {
+            return
         }
 
         this.serverless = serverless
